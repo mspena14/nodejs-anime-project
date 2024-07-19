@@ -1,1 +1,17 @@
-[]
+[
+  {
+    "id": 1,
+    "title": "naruto",
+    "genre": "Accion"
+  },
+  {
+    "id": 2,
+    "title": "boruto",
+    "genre": "Accion"
+  },
+  {
+    "id": 4,
+    "title": "naruto",
+    "genre": "Accion"
+  }
+]
