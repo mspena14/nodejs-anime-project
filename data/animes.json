@@ -1,17 +1,26 @@
 [
   {
     "id": 1,
-    "title": "naruto",
-    "genre": "Accion"
+    "title": "Goku",
+    "genre": "Pelea",
+    "studioId": 1
   },
   {
-    "id": 2,
-    "title": "boruto",
-    "genre": "Accion"
+    "id": 3,
+    "title": "pikachu",
+    "genre": "aventura",
+    "studioId": 1
   },
   {
     "id": 4,
-    "title": "naruto",
-    "genre": "Accion"
+    "title": "Naruto",
+    "genre": "Ninjas",
+    "studioId": 1
+  },
+  {
+    "id": 5,
+    "title": "cars",
+    "genre": "carreras",
+    "studioId": "2"
   }
 ]

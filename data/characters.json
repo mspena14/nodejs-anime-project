@@ -1,0 +1,17 @@
+[
+  {
+    "id": 1,
+    "name": "Naruto",
+    "animeId": 1
+  },
+  {
+    "id": 3,
+    "name": "Inoske",
+    "animeId": 2
+  },
+  {
+    "id": 4,
+    "name": "Zenitsu",
+    "animeId": 2
+  }
+]

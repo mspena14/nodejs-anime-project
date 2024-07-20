@@ -1,7 +1,4 @@
-import { Router } from "express";
-import { promises as fs } from "fs";
-import path from 'path';
-import { fileURLToPath } from "url";
+import { Router, fs, path, fileURLToPath } from "./animes.js";
 
 const routerEstudio = Router();
 const _filename = fileURLToPath(import.meta.url);
@@ -16,23 +13,29 @@ const readEstudiosFs = async () => {
     } catch (err) {
         throw new Error(`Error en la promesa ${err}`)
     }
-}
+};
+
+const idGenerator = async () => {
+    const estudios = await readEstudiosFs();
+    if (estudios.length == 0) return 1;
+    const latestEstudio = estudios[(estudios.length -1 )]
+    return latestEstudio.id + 1
+};
 
 const writeEstudiosFs = async (estudios) => {
     await fs.writeFile(estudiosFilePath, JSON.stringify(estudios, null, 2));
 };
 
-routerEstudio.post("/postestudios", async (req, res) => {
+routerEstudio.post("/postEstudios", async (req, res) => {
     const estudios = await readEstudiosFs();
-    const newAnime = {
-        id: estudios.length + 1,
-        title: req.body.title,
-        genre: req.body.genre
+    const newEstudio = {
+        id: await idGenerator(),
+        name: req.body.name
     };
 
-    estudios.push(newAnime);
+    estudios.push(newEstudio);
     await writeEstudiosFs(estudios);
-    res.status(201).send('Anime created succefully')
+    res.status(201).send('Estudio created succefully')
 })
 
 routerEstudio.get("/", async (req, res) => {
@@ -42,35 +45,36 @@ routerEstudio.get("/", async (req, res) => {
 
 routerEstudio.get("/:id", async (req, res) => {
     const estudios = await readEstudiosFs();
-    const anime = estudios.find(a => a.id === parseInt(req.params.id));
-    if (!anime) return res.status(404).send("Anime not found");
-    res.json(anime)
+    const estudio = estudios.find(a => a.id === parseInt(req.params.id));
+    
+    if (!estudio) return res.status(404).send("Estudio not found");
+    res.json(estudio)
 });
 
 routerEstudio.put("/:id", async (req, res) => {
     const estudios = await readEstudiosFs();
-    const animeIndex = estudios.findIndex(a => a.id === parseInt(req.params.id));
+    const estudioIndex = estudios.findIndex(a => a.id === parseInt(req.params.id));
 
-    if (animeIndex === -1) return res.status(404).send("Anime not found");
-    const updateAnime = {
-        ...estudios[animeIndex],
-        title: req.body.title,
-        genre: req.body.genre,
+    if (estudioIndex === -1) return res.status(404).send("Estudio not found");
+    const updateEstudio = {
+        ...estudios[estudioIndex],
+        name: req.body.name
     };
 
-    estudios[animeIndex] = updateAnime;
+    estudios[estudioIndex] = updateEstudio;
     await writeEstudiosFs(estudios);
-    res.status(200).json({message: "Anime actualizado exitosamente!", anime:updateAnime})
+    res.status(200).json({message: "Estudio actualizado exitosamente!", estudio:updateEstudio})
 });
 
 routerEstudio.delete("/delete/:id", async (req, res) => {
     let estudios = await readEstudiosFs();
-    const anime = estudios.find(a => a.id === parseInt(req.params.id));
-    if (!anime) return res.status(404).send("Anime not found");
-    estudios = estudios.filter(a => a.id !== anime.id);
+    const estudio = estudios.find(a => a.id === parseInt(req.params.id));
+
+    if (!estudio) return res.status(404).send("Estudio not found");
+    estudios = estudios.filter(a => a.id !== estudio.id);
 
     await writeEstudiosFs(estudios)
-    res.send("Anime deleted succefully")
+    res.send("Estudio deleted succefully")
 })
 
 export default routerEstudio
